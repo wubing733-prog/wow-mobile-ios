@@ -11,7 +11,7 @@
 - 玩法自动化测试 9/9 PASS（在 macOS runner 上真实执行）
 - Godot 4.7.2 导出 Xcode 工程成功，WoWMobile.pck = 102.97 MB
 - xcodebuild 归档成功，产出 arm64 真机二进制（Mach-O cputype=0x0100000C）
-- 打包出未签名 .ipa = 64.91 MB
+- 打包出未签名 .ipa = 64.91 MB（构建不可复现：Xcode 会写入时间戳，不同 run 的哈希不同；下面这个哈希对应 run 38165940798 产出、并已发布到 Release 的那份文件）
   - SHA-256: f6743d38b259774d7e7d0224d63479fd904bdd2b9d678a876a6b26119b562a0f
   - Bundle ID: com.example.wowmobile / MinimumOSVersion 14.0 / UIDeviceFamily 1,2
 
