@@ -1,0 +1,91 @@
+name: Build iOS
+
+# 本机是 Windows，无法产出 .ipa；在 GitHub 的 macOS runner 上完成 Xcode 构建。
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 还原大体积资源 (gunzip)
+        run: |
+          set -e
+          gunzip -kf assets/shadowfang/sf_terrain_y.obj.gz
+          ls -lh assets/shadowfang/sf_terrain_y.obj
+
+      - name: 安装 Godot 4.7.2
+        run: |
+          set -e
+          curl -sSL -o godot.zip "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_macos.universal.zip"
+          unzip -q godot.zip
+          sudo mv Godot.app /Applications/Godot.app
+          echo "/Applications/Godot.app/Contents/MacOS" >> $GITHUB_PATH
+
+      - name: 安装导出模板
+        run: |
+          set -e
+          mkdir -p "$HOME/Library/Application Support/Godot/export_templates"
+          curl -sSL -o tpl.tpz "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_export_templates.tpz"
+          unzip -q tpl.tpz -d tpl
+          rm -rf "$HOME/Library/Application Support/Godot/export_templates/4.7.2.stable"
+          mv tpl/templates "$HOME/Library/Application Support/Godot/export_templates/4.7.2.stable"
+
+      - name: 导入 Godot 工程
+        run: Godot --headless --path . --import
+
+      - name: 玩法自动化测试 (9 项)
+        run: |
+          set -o pipefail
+          Godot --headless --path . -- --gametest | tee gametest.log
+          grep -q "RESULT passed=9 failed=0" gametest.log
+
+      - name: 导出 iOS Xcode 工程
+        run: |
+          set -e
+          mkdir -p build/ios
+          Godot --headless --path . --export-debug "iOS" build/ios/WoWMobile.ipa
+          ls -la build/ios
+          du -sh build/ios/WoWMobile.pck
+
+      - name: xcodebuild 归档
+        run: |
+          set -e
+          cd build/ios
+          xcodebuild -list -project WoWMobile.xcodeproj
+          xcodebuild -project WoWMobile.xcodeproj -scheme WoWMobile -configuration Debug \
+            -sdk iphoneos -destination 'generic/platform=iOS' \
+            -archivePath WoWMobile.xcarchive archive \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            | tail -40
+
+      - name: 打包未签名 .ipa
+        run: |
+          set -e
+          cd build/ios
+          APP="$(find WoWMobile.xcarchive/Products/Applications -maxdepth 1 -name '*.app' | head -1)"
+          if [ -z "$APP" ]; then echo "!! no .app produced"; exit 1; fi
+          echo "APP=$APP"
+          rm -rf Payload WoWMobile-unsigned.ipa
+          mkdir -p Payload
+          cp -R "$APP" Payload/
+          zip -qry WoWMobile-unsigned.ipa Payload
+          ls -lh WoWMobile-unsigned.ipa
+          shasum -a 256 WoWMobile-unsigned.ipa | tee WoWMobile-unsigned.ipa.sha256
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: WoWMobile-ios
+          if-no-files-found: warn
+          path: |
+            build/ios/WoWMobile-unsigned.ipa
+            build/ios/WoWMobile-unsigned.ipa.sha256
+            build/ios/WoWMobile.pck
+            build/ios/WoWMobile.xcodeproj
+            gametest.log

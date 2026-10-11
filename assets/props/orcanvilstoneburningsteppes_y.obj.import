@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://b4ca8tt8cq3vt"
+path="res://.godot/imported/orcanvilstoneburningsteppes_y.obj-f44cd6fdf6fbdd5055406b14c4a828b4.mesh"
+
+[deps]
+
+files=["res://.godot/imported/orcanvilstoneburningsteppes_y.obj-f44cd6fdf6fbdd5055406b14c4a828b4.mesh"]
+
+source_file="res://assets/props/orcanvilstoneburningsteppes_y.obj"
+dest_files=["res://.godot/imported/orcanvilstoneburningsteppes_y.obj-f44cd6fdf6fbdd5055406b14c4a828b4.mesh", "res://.godot/imported/orcanvilstoneburningsteppes_y.obj-f44cd6fdf6fbdd5055406b14c4a828b4.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

@@ -1,0 +1,180 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1"]
+[ext_resource type="ArrayMesh" path="res://assets/shadowfang/sf_terrain_y.obj" id="2"]
+[ext_resource type="ArrayMesh" path="res://assets/shadowfang/sf_interior_y.obj" id="3"]
+[ext_resource type="ArrayMesh" path="res://assets/shadowfang/sf_exterior_y.obj" id="4"]
+[ext_resource type="Script" path="res://scripts/Terrain.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/Capture.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/WorldSetup.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/Enemy.gd" id="8"]
+[ext_resource type="Script" path="res://scripts/HUD.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/TouchControls.gd" id="14"]
+[ext_resource type="Script" path="res://scripts/Pickup.gd" id="15"]
+[ext_resource type="Script" path="res://scripts/Menu.gd" id="16"]
+[ext_resource type="Script" path="res://scripts/AudioManager.gd" id="17"]
+[ext_resource type="Script" path="res://scripts/SaveManager.gd" id="18"]
+[ext_resource type="Script" path="res://scripts/GameplayTest.gd" id="19"]
+[ext_resource type="ArrayMesh" path="res://assets/props/pumpkin01_y.obj" id="10"]
+[ext_resource type="ArrayMesh" path="res://assets/props/gnolltent02_y.obj" id="11"]
+[ext_resource type="ArrayMesh" path="res://assets/props/orcanvilstoneburningsteppes_y.obj" id="12"]
+[ext_resource type="ArrayMesh" path="res://assets/props/duskwoodchasmbridge_y.obj" id="13"]
+
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1.2, 3.6, 1.2)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
+radius = 0.6
+height = 2.0
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
+radius = 0.6
+height = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 0.7
+height = 1.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.7
+
+[node name="Main" type="Node3D"]
+script = ExtResource("7")
+
+[node name="Terrain" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2")
+script = ExtResource("5")
+
+[node name="Interior" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3")
+
+[node name="Exterior" type="MeshInstance3D" parent="."]
+mesh = ExtResource("4")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8, -0.4, 0.4, 0, 0.7, 0.7, -0.6, -0.5, 0.6, 0, 120, 0)
+light_energy = 2.0
+shadow_enabled = true
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 420, 0)
+script = ExtResource("1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("BoxShape3D_1")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+fov = 75.0
+
+[node name="Enemy1" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 420, -30)
+script = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Enemy1"]
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Enemy1"]
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Enemy2" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 420, 20)
+script = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Enemy2"]
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Enemy2"]
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Enemy3" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 420, 45)
+script = ExtResource("8")
+
+[node name="Mesh" type="MeshInstance3D" parent="Enemy3"]
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Enemy3"]
+shape = SubResource("CapsuleShape3D_1")
+
+
+[node name="PropPumpkin" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 410, -14)
+mesh = ExtResource("10")
+
+[node name="PropTent" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 410, -26)
+mesh = ExtResource("11")
+
+[node name="PropAnvil" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 412, -34)
+mesh = ExtResource("12")
+
+[node name="PropBridge" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 408, -70)
+mesh = ExtResource("13")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("9")
+
+[node name="Capture" type="Node" parent="."]
+script = ExtResource("6")
+[node name="TouchControls" type="CanvasLayer" parent="."]
+script = ExtResource("14")
+
+[node name="Boss" type="CharacterBody3D" parent="."]
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 0, 420, -90)
+script = ExtResource("8")
+max_health = 400.0
+move_speed = 3.0
+aggro_range = 40.0
+attack_damage = 16.0
+
+[node name="Mesh" type="MeshInstance3D" parent="Boss"]
+mesh = SubResource("CapsuleMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Boss"]
+shape = SubResource("CapsuleShape3D_1")
+
+[node name="Pickup1" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 405, -18)
+script = ExtResource("15")
+
+[node name="Mesh" type="MeshInstance3D" parent="Pickup1"]
+mesh = SubResource("SphereMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Pickup1"]
+shape = SubResource("SphereShape3D_1")
+
+[node name="Pickup2" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 405, -40)
+script = ExtResource("15")
+
+[node name="Mesh" type="MeshInstance3D" parent="Pickup2"]
+mesh = SubResource("SphereMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Pickup2"]
+shape = SubResource("SphereShape3D_1")
+
+[node name="Pickup3" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 405, 10)
+script = ExtResource("15")
+
+[node name="Mesh" type="MeshInstance3D" parent="Pickup3"]
+mesh = SubResource("SphereMesh_1")
+
+[node name="Col" type="CollisionShape3D" parent="Pickup3"]
+shape = SubResource("SphereShape3D_1")
+[node name="Menu" type="CanvasLayer" parent="."]
+script = ExtResource("16")
+
+[node name="AudioManager" type="Node" parent="."]
+group = "audio"
+script = ExtResource("17")
+
+[node name="SaveManager" type="Node" parent="."]
+script = ExtResource("18")
+
+[node name="GameplayTest" type="Node" parent="."]
+script = ExtResource("19")

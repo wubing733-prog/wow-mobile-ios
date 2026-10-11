@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bg5lal3mitqlu"
+
+[deps]
+
+files=["res://tools/map-dirs.files.translation", "res://tools/map-dirs.bytes.translation"]
+
+source_file="res://tools/map-dirs.csv"
+dest_files=["res://tools/map-dirs.files.translation", "res://tools/map-dirs.bytes.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

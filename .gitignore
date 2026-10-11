@@ -1,0 +1,30 @@
+# ---- Godot cache / editor ----
+.godot/
+*.translation
+export.cfg
+export_credentials.cfg
+.import/
+
+# ---- Build outputs (rebuilt by CI) ----
+build/
+bin/
+_check.ps1
+
+# ---- Large extracted assets kept locally only ----
+_unused/
+tools/community-listfile.csv
+tools/node_modules/
+tools/WoWDBDefs-master/
+tools/wowdbdefs.zip
+
+# ---- REA / Ghidra artifacts (628 MB) ----
+ghidra-proj/
+ghidra-scripts/*.class
+
+# ---- Large source asset: stored gzipped in the repo ----
+# CI runs `gunzip -kf assets/shadowfang/sf_terrain_y.obj.gz` before importing.
+assets/shadowfang/sf_terrain_y.obj
+
+# ---- OS junk ----
+Thumbs.db
+desktop.ini
