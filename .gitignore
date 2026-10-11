@@ -28,3 +28,6 @@ assets/shadowfang/sf_terrain_y.obj
 # ---- OS junk ----
 Thumbs.db
 desktop.ini
+
+# ---- 本地临时脚本 ----
+_*.ps1
