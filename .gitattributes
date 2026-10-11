@@ -1,0 +1,9 @@
+# 统一换行，避免 Windows 上写出的 CRLF 破坏 CI 里的 shell 脚本
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.obj binary
+*.ogg binary
+*.gz binary
+*.pck binary
+*.zip binary
